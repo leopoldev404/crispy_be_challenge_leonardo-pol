@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY backend/src/TodoService.Api/TodoService.Api.csproj TodoService.Api/TodoService.Api.csproj
+COPY backend/src/TodoService.Core/TodoService.Core.csproj TodoService.Core/TodoService.Core.csproj
+COPY backend/src/TodoService.Infrastructure/TodoService.Infrastructure.csproj TodoService.Infrastructure/TodoService.Infrastructure.csproj
+RUN dotnet restore -r linux-x64 "TodoService.Api/TodoService.Api.csproj"
+
+COPY backend/src/TodoService.Api/ TodoService.Api/
+COPY backend/src/TodoService.Core/ TodoService.Core/
+COPY backend/src/TodoService.Infrastructure/ TodoService.Infrastructure/
+WORKDIR /src/TodoService.Api
+RUN dotnet publish -c Release --no-self-contained -r linux-x64 -o /app "TodoService.Api.csproj"
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "TodoService.Api.dll"]

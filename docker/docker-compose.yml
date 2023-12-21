@@ -1,0 +1,44 @@
+version: "3.1"
+services:
+  frontend-service:
+    container_name: todo-frontend
+    restart: always
+    build:
+      context: ../
+      dockerfile: ./docker/frontend-dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "4000:4000"
+    depends_on:
+      - backend-service
+      - database-service
+
+  backend-service:
+    container_name: todo-backend
+    restart: always
+    build:
+      context: ../
+      dockerfile: ./docker/backend-dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - database-service
+
+  database-service:
+    image: postgres
+    container_name: todo-database
+    restart: always
+    environment:
+      POSTGRES_DB: todo
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - todo-data:/data/tododb
+
+volumes:
+  todo-data:

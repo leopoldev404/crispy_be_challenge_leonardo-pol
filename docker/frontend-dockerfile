@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY frontend/Todo.Application/TodoService.Application.csproj Todo.Application/TodoService.Application.csproj
+RUN dotnet restore -r linux-x64 "Todo.Application/Todo.Application.csproj"
+
+COPY frontend/Todo.Application/ Todo.Application/
+WORKDIR /src/Todo.Application
+RUN dotnet publish -c Release --no-self-contained -r linux-x64 -o /app "Todo.Application.csproj"
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "Todo.Application.dll"]
