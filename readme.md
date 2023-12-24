@@ -26,36 +26,28 @@ This repository contains a sample project of a full-stack Todo Application:
 
 ### Startup
 
-1. Clone repository
+```bash
+# clone repository
+~$ git clone https://github.com/leopoldev404/crispy_be_challenge_leonardo-pol.git
+~$ cd crispy_be_challenge_leonardo-pol
 
-   > `git clone https://github.com/leopoldev404/crispy_be_challenge_leonardo-pol.git`
+# export env required variables (example for linux, use "set" for windows)
+~/crispy_be_challenge_leonardo-pol$ export POSTGRES_USER=dev
+~/crispy_be_challenge_leonardo-pol$ export POSTGRES_PASSWORD=password
+~/crispy_be_challenge_leonardo-pol$ export APIKEY=key
 
-2. Go into project folder
+# start containers
+~/crispy_be_challenge_leonardo-pol$ docker-compose -f docker/docker-compose.yml up --build -d
+```
 
-   > `cd crispy_be_challenge_leonardo-pol`
-
-3. Set Required Environment Variables (on linux example)
-
-   > export POSTGRES_USER=dev
-   >
-   > export POSTGRES_PASSWORD=password
-   >
-   > export APIKEY=key
-
-4. Run Containers
-
-   > `docker-compose -f docker/docker-compose.yml up --build -d`
-
-5. Open your browser on `localhost:4000` and Enjoy!
+#### Open your browser on `localhost:4000` and Enjoy!
 
 ### Cleanup Environment
 
-1. Go into project folder
-
-   > cd crispy_be_challenge_leonardo-pol
-
-2. Shutdown Containers
-   > docker-compose -f docker/docker-compose.yml down
+```sh
+~$ cd crispy_be_challenge_leonardo-pol
+~/crispy_be_challenge_leonardo-pol$ docker-compose -f docker/docker-compose.yml down
+```
 
 ## Features 💥
 
