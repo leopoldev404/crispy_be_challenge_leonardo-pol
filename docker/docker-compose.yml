@@ -26,7 +26,6 @@ services:
       ASPNETCORE_ENVIRONMENT: container
       Authentication__ApiKey: ${AUTHENTICATION_APIKEY}
       DatabaseSettings__ConnectionString: ${DATABASESETTINGS_CONNECTIONSTRING}
-
     depends_on:
       - database-service
 
