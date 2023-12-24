@@ -1,22 +1,27 @@
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
-using TodoService.Api.Requests;
+using TodoService.Api.Apis.Requests;
+using TodoService.Api.Apis.Validators;
 using TodoService.Biz.Commands;
 using TodoService.Biz.Models;
 using TodoService.Biz.Queries;
 
-namespace TodoService.Api;
+namespace TodoService.Api.Apis;
 
 public static class TodoApi
 {
-    public static RouteGroupBuilder MapTodosApiEndpoints(this RouteGroupBuilder routeGroupBuilder)
+    public static RouteGroupBuilder MapTodosApi(this RouteGroupBuilder routeGroupBuilder)
     {
         routeGroupBuilder.MapGet("", GetAllAsync);
+
         routeGroupBuilder.MapPost("", PostAsync);
+
         routeGroupBuilder.MapDelete("/{id}", DeleteAsync);
-        routeGroupBuilder.MapPatch("", PatchAsync);
+
+        routeGroupBuilder.MapPatch("", PatchAsync)
+            .AddEndpointFilter<RequestsValidatorEndpointFilter<UpdateTodoItemRequest>>();
+
         return routeGroupBuilder;
     }
 
@@ -25,20 +30,20 @@ public static class TodoApi
 
     public static async ValueTask<IResult> PostAsync(
         ISender sender,
-        [FromQuery] string todoText)
+        [FromQuery] string todo)
     {
-        if (string.IsNullOrEmpty(todoText))
+        if (string.IsNullOrEmpty(todo))
         {
             return Results.BadRequest("Invalid new todo item text");
         }
 
-        TodoItem todoItem = await sender.Send(new CreateTodoItemCommand(todoText));
+        TodoItem todoItem = await sender.Send(new CreateTodoItemCommand(todo));
         return Results.Created("", todoItem);
     }
 
     public static async ValueTask<IResult> DeleteAsync(
         ISender sender,
-        string id)
+        [FromRoute] string id)
     {
         bool succeeded = await sender.Send(new DeleteTodoItemCommand(id));
 
@@ -49,21 +54,14 @@ public static class TodoApi
 
     public static async ValueTask<IResult> PatchAsync(
         ISender sender,
-        IValidator<UpdateTodoItemRequest> validator,
         [FromBody] UpdateTodoItemRequest request)
     {
-        var validationResult =
-            await validator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            return Results.ValidationProblem(validationResult.ToDictionary());
-        }
-
         var todoItem = new TodoItem(
             request.Id,
             request.Text,
-            request.Completed);
+            request.Completed,
+            null,
+            DateTime.UtcNow);
 
         bool succeeded = await sender.Send(new UpdateTodoItemCommand(todoItem));
 

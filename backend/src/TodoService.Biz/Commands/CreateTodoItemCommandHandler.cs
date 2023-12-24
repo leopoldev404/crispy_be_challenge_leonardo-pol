@@ -4,7 +4,7 @@ using TodoService.Biz.Models;
 
 namespace TodoService.Biz.Commands;
 
-public class CreateTodoItemCommandHandler(ITodoRepository todoRepository)
+public sealed class CreateTodoItemCommandHandler(ITodoRepository todoRepository)
     : IRequestHandler<CreateTodoItemCommand, TodoItem>
 {
     private readonly ITodoRepository todoRepository = todoRepository;
@@ -13,10 +13,14 @@ public class CreateTodoItemCommandHandler(ITodoRepository todoRepository)
         CreateTodoItemCommand request,
         CancellationToken cancellationToken)
     {
-        TodoItem todoItem = new(
+        DateTime utcNow = DateTime.UtcNow;
+
+        var todoItem = new TodoItem(
             Guid.NewGuid().ToString(),
             request.Text,
-            false);
+            false,
+            utcNow,
+            utcNow);
 
         await todoRepository.AddAsync(todoItem);
         return todoItem;

@@ -3,7 +3,7 @@ using TodoService.Biz.Abastractions;
 
 namespace TodoService.Biz.Commands;
 
-public class DeleteTodoItemCommandHandler(ITodoRepository todoRepository)
+public sealed class DeleteTodoItemCommandHandler(ITodoRepository todoRepository)
     : IRequestHandler<DeleteTodoItemCommand, bool>
 {
     private readonly ITodoRepository todoRepository = todoRepository;

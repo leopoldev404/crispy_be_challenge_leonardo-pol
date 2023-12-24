@@ -3,4 +3,6 @@ namespace TodoService.Biz.Models;
 public record TodoItem(
     string Id,
     string Text,
-    bool Completed);
+    bool Completed,
+    DateTime? CreatedAt,
+    DateTime? UpdatedAt);

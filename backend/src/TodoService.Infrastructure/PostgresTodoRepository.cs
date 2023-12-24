@@ -17,9 +17,11 @@ public class PostgresTodoRepository(IOptions<DatabaseSettings> databaseSettings)
     {
         string createTodoTableSql = """
             CREATE TABLE IF NOT EXISTS todos (
-                Id VARCHAR(255) PRIMARY KEY,
-                Text VARCHAR(255) NOT NULL,
-                Completed BOOLEAN NOT NULL
+                id VARCHAR(255) PRIMARY KEY,
+                text VARCHAR(255) NOT NULL,
+                completed BOOLEAN NOT NULL,
+                created TIMESTAMP WITH TIME ZONE NOT NULL,
+                updated TIMESTAMP WITH TIME ZONE NOT NULL
             )
         """;
 
@@ -29,7 +31,15 @@ public class PostgresTodoRepository(IOptions<DatabaseSettings> databaseSettings)
 
     public async ValueTask<List<TodoItem>> GetAsync()
     {
-        string getTodosSql = "SELECT * FROM todos";
+        string getTodosSql = """
+            SELECT
+                id as Id,
+                text as Text,
+                completed as Completed,
+                created as CreatedAt,
+                updated as UpdatedAt
+             FROM todos
+        """;
         using IDbConnection connection = new NpgsqlConnection(connectionString);
         var todos = await connection.QueryAsync<TodoItem>(getTodosSql);
         return todos is not null ? todos.ToList() : [];
@@ -38,20 +48,23 @@ public class PostgresTodoRepository(IOptions<DatabaseSettings> databaseSettings)
     public async ValueTask AddAsync(TodoItem todoItem)
     {
         string insertTodoSql = """
-            INSERT INTO todos (Id, Text, Completed)
-            VALUES (@Id, @Text, @Completed)
+            INSERT INTO todos(id, text, completed, created, updated)
+            VALUES(@Id, @Text, @Completed, @CreatedAt, @UpdatedAt)
         """;
 
         using IDbConnection connection = new NpgsqlConnection(connectionString);
         await connection.ExecuteAsync(insertTodoSql, todoItem);
     }
+
     public async ValueTask<int> UpdateAsync(TodoItem todoItem)
     {
         string updateTodoItemSql = """
             UPDATE todos
-            SET Completed = @Completed,
-                Text = @Text
-            WHERE Id = @Id
+            SET
+                completed = @Completed,
+                text = @Text,
+                updated = @UpdatedAt
+            WHERE id = @Id
         """;
 
         using IDbConnection connection = new NpgsqlConnection(connectionString);
@@ -61,7 +74,7 @@ public class PostgresTodoRepository(IOptions<DatabaseSettings> databaseSettings)
     public async ValueTask<int> DeleteAsync(string id)
     {
         using IDbConnection connection = new NpgsqlConnection(connectionString);
-        string deleteTodoSql = "DELETE FROM todos WHERE Id = @id";
+        string deleteTodoSql = "DELETE FROM todos WHERE id = @id";
         return await connection.ExecuteAsync(deleteTodoSql, new { id });
     }
 

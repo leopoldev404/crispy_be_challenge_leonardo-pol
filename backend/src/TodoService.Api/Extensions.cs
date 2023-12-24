@@ -12,14 +12,8 @@ public static class Extensions
 {
     public static WebApplicationBuilder AddLogger(this WebApplicationBuilder builder)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
-            .Build();
-
         var logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
+            .ReadFrom.Configuration(builder.Configuration)
             .CreateLogger();
 
         builder.Logging.ClearProviders();
