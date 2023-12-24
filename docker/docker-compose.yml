@@ -23,8 +23,10 @@ services:
     ports:
       - "5000:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: Containerized
-      SERVICE_API_KEY: ${SERVICE_API_KEY}
+      ASPNETCORE_ENVIRONMENT: container
+      Authentication__ApiKey: ${AUTHENTICATION_APIKEY}
+      DatabaseSettings__ConnectionString: ${DATABASESETTINGS_CONNECTIONSTRING}
+
     depends_on:
       - database-service
 
