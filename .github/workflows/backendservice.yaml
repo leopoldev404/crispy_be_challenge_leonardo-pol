@@ -1,0 +1,30 @@
+name: .NET Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      working-directory: backend/src
+      run: dotnet restore
+
+    - name: Build
+      working-directory: backend/src
+      run: dotnet build --configuration Release
+
+    - name: Run tests
+      working-directory: backend/tests
+      run: dotnet test --verbosity normal
