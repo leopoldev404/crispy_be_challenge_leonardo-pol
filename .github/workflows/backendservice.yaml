@@ -1,4 +1,4 @@
-name: .NET Tests
+name: Backend Service CI/CD
 
 on:
   push:
@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '8.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.x"
 
-    - name: Restore dependencies
-      working-directory: backend/src
-      run: dotnet restore
+      - name: Restore dependencies
+        working-directory: backend
+        run: dotnet restore
 
-    - name: Build
-      working-directory: backend/src
-      run: dotnet build --configuration Release
+      - name: Build
+        working-directory: backend
+        run: dotnet build --configuration Release
 
-    - name: Run tests
-      working-directory: backend/tests
-      run: dotnet test --verbosity normal
+      - name: Run tests
+        working-directory: backend/tests/TodoService.UnitTests
+        run: dotnet test --verbosity normal
