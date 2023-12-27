@@ -6,47 +6,41 @@ This repository contains a sample project of a full-stack Todo Application:
 
 - **.github:** contains CI-CD scripts for Github Actions
 - **docker:** contains docker-compose and docker files to start required containers
-- **frontend:** contains ASP.NET Core 8 Application code
+- **frontend:** contains ASP.NET Core 8 Razor Application code
 - **backend:** contains ASP.NET Core 8 API Service code
 
-## Dev Environment 👨‍💻
+## Get Started
 
-- WSL-2
-- Ubuntu 22.04
-- Docker
-- Visual Studio Code
-- Visual Studio Code Extensions (Docker, C#, IntelliCode)
-
-## Run Application 🚀
-
-### **System Requirements:**
+### System Requirements:
 
 - [Docker](https://docs.docker.com/)
 - [Docker Compose](https://docs.docker.com/)
 
-### Startup
+### Run
 
-```bash
+```sh
 # clone repository
-~$ git clone https://github.com/leopoldev404/crispy_be_challenge_leonardo-pol.git
-~$ cd crispy_be_challenge_leonardo-pol
+$ git clone https://github.com/leopoldev404/crispy_be_challenge_leonardo-pol.git
+$ cd crispy_be_challenge_leonardo-pol
 
 # export env required variables (example for linux, use "set" for windows)
-~/crispy_be_challenge_leonardo-pol$ export POSTGRES_USER=dev
-~/crispy_be_challenge_leonardo-pol$ export POSTGRES_PASSWORD=password
-~/crispy_be_challenge_leonardo-pol$ export APIKEY=key
+$ export POSTGRES_USER=dev
+$ export POSTGRES_PASSWORD=password
+$ export APIKEY=key
 
 # start containers
-~/crispy_be_challenge_leonardo-pol$ docker-compose -f docker/docker-compose.yml up --build -d
+$ docker-compose -f docker/docker-compose.yml up --build -d
 ```
 
-#### Open your browser on `localhost:4000` and Enjoy!
+### Test
+
+**Open your browser on `localhost:4000` and Enjoy!**
 
 ### Cleanup Environment
 
 ```sh
-~$ cd crispy_be_challenge_leonardo-pol
-~/crispy_be_challenge_leonardo-pol$ docker-compose -f docker/docker-compose.yml down
+$ cd crispy_be_challenge_leonardo-pol
+$ docker-compose -f docker/docker-compose.yml down
 ```
 
 ## Features 💥
