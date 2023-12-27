@@ -56,29 +56,46 @@
         list-style-type: none;
         padding: 0;
         display: flex;
+        flex-direction: column;
     }
 
     li {
-        margin-bottom: 2px;
-        padding: 10px;
-        border-radius: 3px;
-        font-weight: 600;
+        display: flex;
     }
 </style>
 
 <body>
     <h1>To-Do List</h1>
     <br>
-    <ul>
-        @foreach (var todoItem in Model.TodoItems)
-        {
-            <li style="color: @(todoItem.Completed ? "green" : "red")">
-                @todoItem.Text
-            </li>
-        }
-    </ul>
+    @if (Model.Todos.Count == 0)
+    {
+        <p class="empty">The list is empty</p>
+    }
+    else
+    {
+        <ul class="list-unstyled">
+            @foreach (var todo in Model.Todos)
+            {
+                <li>
+                    <p style="color: @(todo.Completed ? "green" : "red")">@todo.Text</p>
+@* 
+                    <form method="post" asp-page="Index" asp-page-handler="Remove" style="display: inline">
+                        <input type="hidden" name="Id" value="@todo.Id" />
+                        <button type="submit" class="btn btn-link">Delete</button>
+                    </form> *@
+                    @* <form method="post" asp-page="Index" asp-page-handler="Edit" style="display: inline">
+            <input type="hidden" name="Id" value="@todo.Id" />
+            <button type="submit" class="btn btn-link">Mark as complete</button>
+            </form> *@
+                </li>
+            }
+        </ul>
+    }
     <br>
-
+    <form asp-page="Index" method="post" class="form-inline">
+        <input type="text" id="Text" name="Text" class="form-control" placeholder="Text" />
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add</button>
+    </form>
 </body>
 
 </html>
