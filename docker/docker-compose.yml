@@ -20,10 +20,11 @@ services:
       context: ../
       dockerfile: docker/backend-dockerfile
     ports:
-      - "5000:8080"
+      - "5000:5000"
     environment:
       ASPNETCORE_ENVIRONMENT: Container
-      Authentication__ApiKey: ${APIKEY}
+      ASPNETCORE_URLS: "http://+:5000"
+      Authentication__ApiKey: ${API_KEY}
       DatabaseSettings__ConnectionString: "Host=db;Port=5432;Database=todo;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};"
     depends_on:
       - db
@@ -36,13 +37,13 @@ services:
       dockerfile: ./docker/frontend-dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Container
-      TodoApi__Url: "http://backend:8080/api/v1/todos"
-      TodoApi__ApiKey: ${APIKEY}
+      ASPNETCORE_URLS: "http://+:4000"
+      TodoApi__Url: "http://backend:5000/api/v1/todos"
+      TodoApi__ApiKey: ${API_KEY}
     ports:
-      - "4000:8080"
+      - "4000:4000"
     depends_on:
       - backend
-      - db
 
 volumes:
   todo-data:
