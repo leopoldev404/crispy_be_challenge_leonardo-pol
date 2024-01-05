@@ -23,10 +23,10 @@ This repository contains a sample project of a full-stack Todo Application:
 $ git clone https://github.com/leopoldev404/crispy_be_challenge_leonardo-pol.git
 $ cd crispy_be_challenge_leonardo-pol
 
-# export env required variables (example for linux, use "set" for windows)
+# export required environment variables (use "set" keyword windows)
 $ export POSTGRES_USER=dev
 $ export POSTGRES_PASSWORD=password
-$ export APIKEY=key
+$ export API_KEY=key
 
 # start containers
 $ docker-compose -f docker/docker-compose.yml up --build -d
