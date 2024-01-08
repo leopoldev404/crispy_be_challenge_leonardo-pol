@@ -42,6 +42,23 @@ $ docker-compose -f docker/docker-compose.yml up --build -d
 
 **Open your browser on [http://localhost:4000](http://localhost:4000) and Enjoy!**
 
+### Test API
+Once you run the docker-compose command the API will be available on [http://localhost:5000/api/v1/todos](http://localhost:5000/api/v1/todos)
+
+The API implements **GET**, **POST**, **DELETE** and **PATCH** Http Methods.
+
+- GET `http://localhost:5000/api/v1/todos` > Get all todo items
+- POST `http://localhost:5000/api/v1/todos?todo=new todo item` > Create new Todo Item
+- PATCH `http://localhost:5000/api/v1/todos` with Body  > Update a todo item given its id, text and completed
+```json
+{
+  "id": "15cce985-0791-4a76-9181-06886596a425",
+  "text": "updated text",
+  "completed": true
+}
+```
+- DELETE `http://localhost:5000/api/v1/todos/{todoItemId}`
+
 ### Cleanup Environment
 
 ```sh
