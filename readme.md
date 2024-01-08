@@ -6,6 +6,8 @@
 
 This repository contains a simple Todo Full-Stack Application entirely developed using **.NET 8** and its latest features.
 
+With this app you can easily read, add, edit and delete your tasks.
+
 ### Project structure
 
 - **.github:** contains CI-CD scripts for Github Actions
@@ -13,7 +15,7 @@ This repository contains a simple Todo Full-Stack Application entirely developed
 - **frontend:** contains ASP.NET Core Razor App code
 - **backend:** contains ASP.NET Core 8 API Service code
 
-## Get started 👨‍💻
+## Getting started 🚀
 
 ### Requirements
 
