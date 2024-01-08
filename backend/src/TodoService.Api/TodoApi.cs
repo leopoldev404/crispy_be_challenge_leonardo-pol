@@ -1,34 +1,33 @@
 using MediatR;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
-using TodoService.Api.Apis.Requests;
-using TodoService.Api.Apis.Validators;
+using TodoService.Api.Requests;
+using TodoService.Api.Validators;
 using TodoService.Biz.Commands;
 using TodoService.Biz.Models;
 using TodoService.Biz.Queries;
 
-namespace TodoService.Api.Apis;
+namespace TodoService.Api;
 
 public static class TodoApi
 {
-    public static RouteGroupBuilder MapTodosApi(this RouteGroupBuilder routeGroupBuilder)
+    public static RouteGroupBuilder MapTodoApiEndpoints(this RouteGroupBuilder routeGroupBuilder)
     {
-        routeGroupBuilder.MapGet("", GetAllAsync);
+        routeGroupBuilder.MapGet("", Get);
 
-        routeGroupBuilder.MapPost("", PostAsync);
+        routeGroupBuilder.MapPost("", Create);
 
-        routeGroupBuilder.MapDelete("/{id}", DeleteAsync);
+        routeGroupBuilder.MapDelete("/{id}", Delete);
 
-        routeGroupBuilder.MapPatch("", PatchAsync)
+        routeGroupBuilder.MapPatch("", Update)
             .AddEndpointFilter<RequestsValidatorEndpointFilter<UpdateTodoItemRequest>>();
 
         return routeGroupBuilder;
     }
 
-    public static async ValueTask<List<TodoItem>> GetAllAsync(ISender sender) =>
+    public static async ValueTask<List<TodoItem>> Get(ISender sender) =>
         await sender.Send(new GetTodoItemsQuery());
 
-    public static async ValueTask<IResult> PostAsync(
+    public static async ValueTask<IResult> Create(
         ISender sender,
         [FromQuery] string todo)
     {
@@ -41,7 +40,7 @@ public static class TodoApi
         return Results.Created("", todoItem);
     }
 
-    public static async ValueTask<IResult> DeleteAsync(
+    public static async ValueTask<IResult> Delete(
         ISender sender,
         [FromRoute] string id)
     {
@@ -52,7 +51,7 @@ public static class TodoApi
                 : Results.NotFound("Id not found");
     }
 
-    public static async ValueTask<IResult> PatchAsync(
+    public static async ValueTask<IResult> Update(
         ISender sender,
         [FromBody] UpdateTodoItemRequest request)
     {
@@ -68,15 +67,5 @@ public static class TodoApi
         return succeeded
             ? Results.NoContent()
             : Results.NotFound("Id not found");
-    }
-
-    public static WebApplication MapHealthChecks(this WebApplication app)
-    {
-        app.MapHealthChecks("/health");
-        app.MapHealthChecks("/liveness", new HealthCheckOptions
-        {
-            Predicate = r => r.Tags.Contains("live")
-        });
-        return app;
     }
 }

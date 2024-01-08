@@ -1,13 +1,13 @@
 using FluentValidation;
 using TodoService.Api;
-using TodoService.Api.Apis;
-using TodoService.Api.Apis.Authentication;
+using TodoService.Api.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLogger();
 builder.Services.AddMediator();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddSettings();
 builder.Services.AddRepositories();
 builder.Services.AddDefaultCors();
 builder.Services.AddHealthChecks();
@@ -17,7 +17,7 @@ var app = builder.Build();
 app.UseCors();
 
 app.MapGroup("/api/v1/todos")
-    .MapTodosApi()
+    .MapTodoApiEndpoints()
     .AddEndpointFilter<ApiKeyAuthEndpointFilter>()
     .WithTags("Todos Api V1");
 

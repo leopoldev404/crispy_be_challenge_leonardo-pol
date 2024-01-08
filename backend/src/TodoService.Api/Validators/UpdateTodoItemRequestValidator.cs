@@ -1,8 +1,7 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using TodoService.Api.Apis.Requests;
+using TodoService.Api.Requests;
 
-namespace TodoService.Api.Apis.Validators;
+namespace TodoService.Api.Validators;
 
 public class UpdateTodoItemRequestValidator : AbstractValidator<UpdateTodoItemRequest>
 {

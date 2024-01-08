@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TodoService.Api.Apis.Requests;
+namespace TodoService.Api.Requests;
 
 public record UpdateTodoItemRequest(
     [property: JsonPropertyName("id")] string Id,

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using TodoService.Biz;
 using TodoService.Biz.Abastractions;
@@ -29,14 +30,18 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(typeof(BusinessLogicAssembly).Assembly));
     }
 
-    public static void AddRepositories(this IServiceCollection services)
+
+    public static void AddSettings(this IServiceCollection services)
     {
         services
             .AddOptions<DatabaseSettings>()
-            .BindConfiguration("DatabaseSettings")
+            .BindConfiguration(DatabaseSettings.ConfigurationSectionName)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+    }
 
+    public static void AddRepositories(this IServiceCollection services)
+    {
         services.AddSingleton<ITodoRepository, PostgresTodoRepository>();
     }
 
@@ -51,5 +56,15 @@ public static class Extensions
     {
         var sender = app.Services.GetRequiredService<ISender>();
         await sender.Send(new InitDbCommand());
+    }
+
+    public static WebApplication MapHealthChecks(this WebApplication app)
+    {
+        app.MapHealthChecks("/health");
+        app.MapHealthChecks("/liveness", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("live")
+        });
+        return app;
     }
 }

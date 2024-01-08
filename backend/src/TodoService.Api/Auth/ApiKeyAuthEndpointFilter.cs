@@ -1,4 +1,4 @@
-namespace TodoService.Api.Apis.Authentication;
+namespace TodoService.Api.Auth;
 
 public class ApiKeyAuthEndpointFilter(IConfiguration configuration)
     : IEndpointFilter
@@ -16,7 +16,7 @@ public class ApiKeyAuthEndpointFilter(IConfiguration configuration)
         }
 
         string apiKey = configuration
-            .GetValue<string>(AuthConstants.ApiKeySectionName) ??
+            .GetValue<string>(AuthConstants.ApiKeyConfigurationSectionName) ??
             throw new ArgumentNullException("Missing ApiKey Configuration!");
 
         if (!apiKey.Equals(receivedApiKey))
