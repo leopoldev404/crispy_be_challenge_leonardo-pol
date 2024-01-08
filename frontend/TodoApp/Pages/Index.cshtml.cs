@@ -11,12 +11,19 @@ public class IndexModel(IHttpClientFactory httpClientFactory) : PageModel
 
     public async Task OnGetAsync()
     {
-        var todoApiClient = httpClientFactory.CreateClient("todoApiClient");
+        using var todoApiClient = httpClientFactory.CreateClient("todoApiClient");
         Todos = await todoApiClient.GetFromJsonAsync<List<TodoItem>>("") ?? [];
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(string id)
     {
+        if (!string.IsNullOrEmpty(id))
+        {
+            using var todoApiClient = httpClientFactory.CreateClient("todoApiClient");
+            var response = await todoApiClient.DeleteAsync($"/api/v1/todos/{id}");
+            response.EnsureSuccessStatusCode();
+        }
+
         if (!string.IsNullOrEmpty(Request.Form["Text"]))
         {
             var todoApiClient = httpClientFactory.CreateClient("todoApiClient");
@@ -24,12 +31,4 @@ public class IndexModel(IHttpClientFactory httpClientFactory) : PageModel
         }
         return RedirectToPage();
     }
-
-    // public async Task DeleteItemAsync(string todoItemId)
-    // {
-    //     var todoApiClient = httpClientFactory.CreateClient("todoApiClient");
-    //     await todoApiClient.DeleteAsync(todoItemId);
-    //     var toRemoveItem = TodoItems.Single(item => item.Id == todoItemId);
-    //     TodoItems.Remove(toRemoveItem);
-    // }
 }

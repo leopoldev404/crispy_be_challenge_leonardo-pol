@@ -76,17 +76,11 @@
         <ul class="list-unstyled">
             @foreach (var todo in Model.Todos)
             {
-                <li>
-                    <p style="color: @(todo.Completed ? "green" : "red")">@todo.Text</p>
-@* 
-                    <form method="post" asp-page="Index" asp-page-handler="Remove" style="display: inline">
-                        <input type="hidden" name="Id" value="@todo.Id" />
-                        <button type="submit" class="btn btn-link">Delete</button>
-                    </form> *@
-                    @* <form method="post" asp-page="Index" asp-page-handler="Edit" style="display: inline">
-            <input type="hidden" name="Id" value="@todo.Id" />
-            <button type="submit" class="btn btn-link">Mark as complete</button>
-            </form> *@
+                <li style="display: flex;">
+                    <p>@todo.Text</p>
+                    <form asp-action="Post" asp-route-id="@todo.Id" method="post">
+                        <input type="submit" value="Delete" />
+                    </form>
                 </li>
             }
         </ul>
