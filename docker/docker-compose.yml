@@ -24,7 +24,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Container
       ASPNETCORE_URLS: "http://+:5000"
-      Authentication__ApiKey: ${API_KEY}
+      Auth__ApiKey: ${API_KEY}
       DatabaseSettings__ConnectionString: "Host=db;Port=5432;Database=todo;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};"
     depends_on:
       - db
