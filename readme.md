@@ -46,7 +46,7 @@ $ docker-compose -f docker/docker-compose.yml up --build -d
 Once you run the docker-compose command the API will be available on [http://localhost:5000/api/v1/todos](http://localhost:5000/api/v1/todos)
 
 **The service is protected with `API KEY Authentication`, so make sure to add `ApiKey` header to your http requests
-(The value must be the equal to the API_KEY environment variable you have define previously).**
+(The value must be equal to API_KEY environment variable you have defined previously).**
 
 The API implements **GET**, **POST**, **DELETE** and **PATCH** Http Methods.
 
