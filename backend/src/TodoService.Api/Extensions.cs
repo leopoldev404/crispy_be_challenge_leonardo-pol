@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Npgsql;
 using Serilog;
 using TodoService.Biz;
 using TodoService.Biz.Abastractions;
@@ -31,7 +33,7 @@ public static class Extensions
     }
 
 
-    public static void AddSettings(this IServiceCollection services)
+    public static void AddInfrastructureSettings(this IServiceCollection services)
     {
         services
             .AddOptions<DatabaseSettings>()
@@ -42,7 +44,14 @@ public static class Extensions
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<ITodoRepository, PostgresTodoRepository>();
+        services.AddScoped<ITodoRepository>(serviceProvider =>
+        {
+            DatabaseSettings dbSettings =
+                serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
+
+            return new PostgresTodoRepository(
+                new NpgsqlConnection(dbSettings.ConnectionString));
+        });
     }
 
     public static void AddDefaultCors(this IServiceCollection services)

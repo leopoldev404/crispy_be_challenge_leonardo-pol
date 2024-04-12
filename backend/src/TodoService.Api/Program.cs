@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddLogger();
 builder.Services.AddMediator();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-builder.Services.AddSettings();
+builder.Services.AddInfrastructureSettings();
 builder.Services.AddRepositories();
 builder.Services.AddDefaultCors();
 builder.Services.AddHealthChecks();
